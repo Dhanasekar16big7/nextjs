@@ -1,4 +1,5 @@
 "use client"
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react"
@@ -31,7 +32,7 @@ export default function Home() {
       <div className="card_data flex flex-col items-center gap-5 shadow-md p-4 rounded w-1/2 text-center bg-white">
         <Image src="/user-image.png" alt="User Image" width={150} height={150} />
         <p className="text-2xl font-bold">Hello world!</p>
-        {/* <Link href="/contact">Contact</Link> */}
+        <Link href="/users"><Button>User details</Button></Link>
       </div>
       
       {
