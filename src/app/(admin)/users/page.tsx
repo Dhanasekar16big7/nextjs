@@ -36,6 +36,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { PutBlobResult } from "@vercel/blob";
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -93,18 +94,24 @@ const Users = () => {
       });
   };
 
-  const onSubmit = async (data: any) => {
-    const formData = new FormData();
-    formData.append("username", data.username);
-    formData.append("mobile", data.mobile);
-    formData.append("address", data.address);
-    formData.append("image", data.image as Blob); // Assuming image is uploaded as a single file
-
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+  
+      // Create form data with the uploaded image URL
+      
+  
+      // Send form data to the server
       const res = await fetch("/api/user", {
         method: "POST",
-        body: formData,
+        body: JSON.stringify({
+          username : values.username,
+          mobile : values.mobile,
+          address : values.address,
+          image : values.image
+        }),
       });
+  
+      // Handle the response
       const responseData = await res.json();
       console.log(responseData.data.rows);
       setUserData(responseData.data.rows);
@@ -114,10 +121,25 @@ const Users = () => {
       console.error(error);
     }
   };
+  
 
   useEffect(() => {
     getUserData();
   }, []);
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    const response = await fetch(
+      `/api/file?filename=${file!.name}`,
+      {
+        method: 'POST',
+        body: file!,
+      },
+    );
+    const newBlob = (await response.json()) as PutBlobResult;
+    const url = newBlob.url;
+    control.setValue('image', url);
+  }
 
   return (
     <>
@@ -180,7 +202,14 @@ const Users = () => {
                     </FormItem>
                   )}
                 />
-                <FormField
+                <Input
+              id="picture"
+              type="file"
+              accept="image/png"
+              onChange={handleFileChange}
+              required
+            />
+                {/* <FormField
                   control={control.control}
                   name="image"
                   render={({ field }) => (
@@ -191,18 +220,13 @@ const Users = () => {
                           type="file"
                           placeholder="Enter the URL of your image"
                           {...field}
-                          // onChange={(e) => {
-                          //  const file = e.target.files?.[0];
-                          //  if (file) {
-                          //    field.onChange(file);
-                          //  }
-                          // }}
+                          onChange={handleFileChange}
                         />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                /> */}
                 <div className="text-center">
                   <Button type="submit">Submit</Button>
                 </div>
