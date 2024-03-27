@@ -18,12 +18,30 @@ const config = {
       },
     },
     extend: {
+      fontSize: {
+        "xxs" : '0.625rem',
+      },
+      width: {
+        '4.5': '18px',
+        '18' : '74px',
+        '8.5' : '34px',
+      },
+      height: {
+        '14.5' : '61px',
+        '8.5' : '34px',
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        usernamecolor : "#FFDB88",
+        cardcontentcolor : "#F2EBE4",
+        cardsubtitlecolor : "#E4C57C",
+        darkbgicons : "#262626",
+        darkbg : "#313131",
+        cardbg : "#272727",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -57,6 +75,7 @@ const config = {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        '13.6' : '13.6px',
       },
       keyframes: {
         "accordion-down": {
@@ -74,7 +93,10 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: 
+  [require("tailwindcss-animate"),
+  require('tailwindcss-debug-screens')
+],
 } satisfies Config
 
 export default config

@@ -1,21 +1,32 @@
-import { db } from "@vercel/postgres";
-import { NextRequest, NextResponse } from "next/server";
+import { db } from '@vercel/postgres';
+import { revalidateTag } from 'next/cache';
+import { NextResponse } from 'next/server';
+ 
+export async function GET() {
+  const client = await db.connect();
+  let users;
+  
+  try {
+    users = await client.sql`SELECT * FROM Users;`;
+  } catch (error) {
+    return NextResponse.json({ error });
+  }
+ 
+  return NextResponse.json({ data: users });
+}
 
-export async function POST(req: NextRequest) {
-    const request = await req.json();
-    try{
-        const client = await db.connect();
-        const response = await client.query(`INSERT INTO 
-        Pets (Name, Owner) 
-      VALUES 
-        ('data1', 'Kannu'),
-        ('data2', 'Ammu'),
-        ('data3', 'Ammu'),
-        ('data4', 'Harish'),
-      `);
-      console.log(response);
-    }catch(err){
-        console.log(err);
-    }
-    return NextResponse.json(request);
+export async function POST(req: Request) {
+  const request = await req.json();
+  try{
+    const client = await db.connect();
+    const response = await client.query(`INSERT INTO 
+    Users (username, mobile, address, image) 
+  VALUES 
+    ('${request.username}', '${request.mobile}', '${request.address}', '${request.image}');`);
+    revalidateTag('users');
+  }catch(err){
+    console.log(err);
+  }
+  return NextResponse.json(request);
+  
 }
