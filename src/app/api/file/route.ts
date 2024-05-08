@@ -1,29 +1,11 @@
-// // import { db } from '@vercel/postgres';
-// // import { revalidateTag } from 'next/cache';
-// import { NextResponse } from 'next/server';
-// import {put} from "@vercel/blob"
-
-// export async function POST(req: Request) {
-//     const form = await req.formData();
-//     const file = form.get("file") as File;
-  
-//     if(!file.name){
-//       return NextResponse.json({ error: "Please select a file" }, { status: 400 });
-//     }
-//     const blob = await put(file.name, file,{
-//       access : "public",
-  
-//     });
-//     return NextResponse.json(blob);
-    
-//   }
-
 import { put } from '@vercel/blob';
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request): Promise<NextResponse> {
   const { searchParams } = new URL(request.url);
   const filename = searchParams.get('filename') || "";
+  console.log("filename ",filename);
+  console.log("post method");
 
   if(filename && request.body) {
 
@@ -31,21 +13,9 @@ export async function POST(request: Request): Promise<NextResponse> {
     const blob = await put(filename, request.body, {
         access: 'public',
     });
-
-    // Here's the code for Pages API Routes:
-    // const blob = await put(filename, request, {
-    //   access: 'public',
-    // });
-
+    
     return NextResponse.json(blob);
   } else {
     return NextResponse.json({message: 'Upload Failed'})
   }
 }
-
-// The next lines are required for Pages API Routes only
-// export const config = {
-//   api: {
-//     bodyParser: false,
-//   },
-// };

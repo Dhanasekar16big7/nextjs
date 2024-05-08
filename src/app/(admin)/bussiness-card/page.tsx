@@ -7,7 +7,7 @@ const BussinessCard = () => {
         <main className="flex min-h-screen flex-col gap-5 p-0 w-full">
         <PageTitle title="Bussiness Card" />
         {/* <div className="w-full container flex justify-center align-center p-5"> */}
-            <BdCard />
+            {/* <BdCard /> */}
         {/* </div> */}
         </main>
         </>

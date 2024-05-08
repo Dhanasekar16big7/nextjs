@@ -73,6 +73,18 @@
   background-repeat: no-repeat;
 }
 
+.add-form::-webkit-scrollbar,
+.edit-form::-webkit-scrollbar,
+.user-table::-webkit-scrollbar {
+  width: 5px;
+}
+.add-form::-webkit-scrollbar-thumb,
+.edit-form::-webkit-scrollbar-thumb,
+.user-table::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 5px;
+}
+
 /* @layer base {
   * {
     @apply border-border;

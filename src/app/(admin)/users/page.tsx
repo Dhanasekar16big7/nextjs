@@ -1,32 +1,8 @@
 "use client";
+import { useState, useEffect } from "react";
+import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { useEffect, useState } from "react";
-import { DataTable } from "@/components/DataTable";
-import { ColumnDef } from "@tanstack/react-table";
-import PageTitle from "@/components/PageTitle";
 import {
   Table,
   TableBody,
@@ -36,7 +12,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { PutBlobResult } from "@vercel/blob";
+import DialogComponent from "@/components/DialogueComponent";
+import PageTitle from "@/components/PageTitle";
+import DeleteButton from "@/components/DeleteButton";
+// import list from "@vercel/blob";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import EditDialogueComponent from "@/components/EditDialogueComponent";
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -44,198 +28,213 @@ const formSchema = z.object({
   }),
   mobile: z.string().min(10, {
     message: "Mobile number must be at least 10 characters.",
+  }).max(10, {
+    message: "Mobile number must be at most 10 characters.",
   }),
   address: z.string().min(10, {
     message: "Address must be at least 10 characters.",
   }),
-  //   file: z.string(),
-  image: z.string().url({
-    message: "Please provide a valid URL for the image.",
+  email : z.string().email({
+    message: "Please provide a valid email address.",
   }),
+  position : z.string().min(2, {
+    message: "Position must be at least 2 characters.",
+  }),
+  company : z.string().min(2, {
+    message: "Company must be at least 2 characters.",
+  }),
+  website : z.string().url({
+    message: "Please provide a valid URL for the website.",
+  }),
+  aboutme : z.string().min(10, {
+    message: "About me must be at least 10 characters.",
+  }),
+  facebook : z.string().url({
+    message: "Please provide a valid URL for the facebook.",
+  }),
+  instagram : z.string().url({
+    message: "Please provide a valid URL for the instagram.",
+  }),
+  twitter : z.string().url({
+    message: "Please provide a valid URL for the twitter.",
+  }),
+  whatsapp : z.string().url({
+    message: "Please provide a valid URL for the whatsapp.",
+  }),
+  linkedin : z.string().url({
+    message: "Please provide a valid URL for the linkedin.",
+  }),
+  tiktok : z.string().url({
+    message: "Please provide a valid URL for the tiktok.",
+  }),
+  snapchat : z.string().url({
+    message: "Please provide a valid URL for the instagram.",
+  }),
+  youtube : z.string().url({
+    message: "Please provide a valid URL for the youtube.",
+  }),
+  // image: z.string().url({
+  //   message: "Please provide a valid URL for the image.",
+  // }),
 });
 
 interface User {
+  id: number;
   username: string;
   mobile: string;
   address: string;
-  image: string;
+  email: string;
+  position: string;
+  company: string;
+  website: string;
+  aboutme: string;
+  facebook: string;
+  instagram: string;
+  twitter: string;
+  whatsapp: string;
+  linkedin: string;
+  tiktok: string;
+  snapchat: string;
+  youtube: string;
+  // image: string;
 }
 
 const Users = () => {
-  const [userData, setUserData] = useState([]);
   const [fetchUserData, setFetchUserData] = useState<User[]>([]);
-  console.log("fetchUserData", fetchUserData);
-
+  const [open, setOpen] = useState(false);
+  const router = useRouter();
   const control = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",
       mobile: "",
       address: "",
-      image: "",
+      email: "",
+      position: "",
+      company: "",
+      website: "",
+      aboutme: "",
+      facebook: "",
+      instagram: "",
+      twitter: "",
+      whatsapp: "",
+      linkedin: "",
+      tiktok: "",
+      snapchat: "",
+      youtube: "",
+      // image: "",
     },
   });
 
   const getUserData = async () => {
-    await fetch("/api/user", {
-      next: {
-        tags: ["users"],
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setFetchUserData(data.data.rows);
-        // setLoading(false);
-        console.log("getUserdata ", data.data.rows);
-      })
-      .catch((err) => console.log(err))
-      .finally(() => {
-        // set loading to false
-      });
-  };
-
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-  
-      // Create form data with the uploaded image URL
-      
-  
-      // Send form data to the server
       const res = await fetch("/api/user", {
-        method: "POST",
-        body: JSON.stringify({
-          username : values.username,
-          mobile : values.mobile,
-          address : values.address,
-          image : values.image
-        }),
+        next: {
+          tags: ["users"],
+        },
       });
-  
-      // Handle the response
-      const responseData = await res.json();
-      console.log(responseData.data.rows);
-      setUserData(responseData.data.rows);
-      getUserData();
-      control.reset();
+      const data = await res.json();
+      if (data && data.data && data.data.rows) {
+        setFetchUserData(data.data.rows);
+        console.log("data.data.rows ", data.data.rows);
+      } 
+      // else {
+      //   console.error("Unexpected API response format: ", data);
+      // }
+      // setFetchUserData(data.data.rows);
     } catch (error) {
       console.error(error);
     }
   };
-  
 
   useEffect(() => {
     getUserData();
   }, []);
 
-  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    const response = await fetch(
-      `/api/file?filename=${file!.name}`,
-      {
-        method: 'POST',
-        body: file!,
-      },
-    );
-    const newBlob = (await response.json()) as PutBlobResult;
-    const url = newBlob.url;
-    control.setValue('image', url);
-  }
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    console.log("values ", values);
+    try {
+      const res = await fetch("/api/user", {
+        method: "POST",
+        body: JSON.stringify(values),
+      });
+      const responseData = await res.json();
+
+      console.log("API Response Data:", responseData);
+
+      if (responseData && responseData.data && responseData.data.rows) {
+        setFetchUserData(responseData.data.rows);
+      } 
+      // else {
+      //   console.error("Unexpected API response format:", responseData);
+      // }
+      getUserData();
+      control.reset();
+      setOpen(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0];
+  //   const response = await fetch(`/api/file?filename=${file!.name}`, {
+  //     method: 'POST',
+  //     body: file!,
+  //   });
+  //   const newBlob = await response.json();
+  //   const url = newBlob.url;
+  //   console.log("responseData upload add ", url);
+  //   control.setValue('image', url);
+  // };
+
+  const deleteUser = async (id: number) => {
+    console.log("ID:", id);
+    const confirmed = confirm('Are you sure you want to delete this user?');
+    if (confirmed) {
+      try {
+        const res = await axios.delete(`/api/user`, {
+          params: {
+            id: id
+          }
+        });
+        getUserData(); // Reload user data after successful deletion
+        if(res.status === 200) {
+          router.refresh();
+        }
+      } catch (error) {
+        console.error("page error ",error);
+      }
+    }
+  };
+
+  // const editData = async (user : any) => {
+  //   console.log("Username:", user);
+  //   try{
+  //     const res = await fetch("/api/user",{
+  //       method: "PUT",
+  //       body: JSON.stringify(user),
+  //     });
+  //     const responseData = await res.json();
+  //     console.log("responseData edit ",responseData);
+  //     if (responseData && responseData.data && responseData.data.rows) {
+  //       setFetchUserData(responseData.data.rows);
+  //     } else {
+  //       console.error("Unexpected API response format:", responseData);
+  //     }
+  //     control.reset();
+  //   }
+  //   catch(error){
+  //     console.error("edit page error ",error);
+  //   }
+
+  // } 
 
   return (
-    <>
-      <main className="flex min-h-screen flex-col gap-5 p-0 w-full">
-        <PageTitle title="Users" />
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button
-              className="bg-primary text-white w-fit ml-auto mr-10 hover:bg-slate-700 hover:text-white"
-              variant="outline"
-            >
-              Add new user
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-md">
-            <Form {...control}>
-              <form
-                onSubmit={control.handleSubmit(onSubmit)}
-                className="space-y-8"
-              >
-                <FormField
-                  control={control.control}
-                  name="username"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Username</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter your username" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={control.control}
-                  name="mobile"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Mobile Number</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter your mobile number"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={control.control}
-                  name="address"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Address</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter your address" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Input
-              id="picture"
-              type="file"
-              accept="image/png"
-              onChange={handleFileChange}
-              required
-            />
-                {/* <FormField
-                  control={control.control}
-                  name="image"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Image URL</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="file"
-                          placeholder="Enter the URL of your image"
-                          {...field}
-                          onChange={handleFileChange}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                /> */}
-                <div className="text-center">
-                  <Button type="submit">Submit</Button>
-                </div>
-              </form>
-            </Form>
-          </DialogContent>
-        </Dialog>
-
-        <div className="container w-full px-5">
+    <main className="flex min-h-screen flex-col gap-5 p-0 w-full">
+      <PageTitle title="Users" />
+      <DialogComponent open={open} setOpen={setOpen} control={control} onSubmit={onSubmit}/>
+      <div className="container px-5 user-table overflow-x-scroll">
           {/* <DataTable columns={columns} data={fetchUserData} /> */}
           <Table>
             <TableHeader>
@@ -243,52 +242,64 @@ const Users = () => {
                 <TableHead>Username</TableHead>
                 <TableHead>Mobile</TableHead>
                 <TableHead>Address</TableHead>
-                <TableHead>Image</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead>Position</TableHead>
+                <TableHead>Company</TableHead>
+                <TableHead>Website</TableHead>
+                <TableHead>About Me</TableHead>
+                <TableHead>Facebook</TableHead>
+                <TableHead>Instagram</TableHead>
+                <TableHead>Twitter</TableHead>
+                <TableHead>Whatsapp</TableHead>
+                <TableHead>Linkedin</TableHead>
+                <TableHead>Tiktok</TableHead>
+                <TableHead>Snapchat</TableHead>
+                <TableHead>Youtube</TableHead>
+                {/* <TableHead>Image</TableHead> */}
               </TableRow>
             </TableHeader>
             <TableBody>
-              {
-                fetchUserData.map((user,i) => (
-                  <TableRow key={i}>
-                    <TableCell className="font-medium">{user.username!}</TableCell>
-                    <TableCell>{user.mobile}</TableCell>
-                    <TableCell>{user.address}</TableCell>
-                    <TableCell>{user.image}</TableCell>
-                  </TableRow>
-                ))
-              }
-            </TableBody>
+            {fetchUserData.map((user, index) => (
+              <TableRow key={index}>
+                <TableCell className="font-medium">{user?.username}</TableCell>
+                <TableCell>{user?.mobile}</TableCell>
+                <TableCell>{user?.address}</TableCell>
+                <TableCell>{user?.email}</TableCell>
+                <TableCell>{user?.position}</TableCell>
+                <TableCell>{user?.company}</TableCell>
+                <TableCell>{user?.website}</TableCell>
+                <TableCell>{user?.aboutme}</TableCell>
+                <TableCell>{user?.facebook}</TableCell>
+                <TableCell>{user?.instagram}</TableCell>
+                <TableCell>{user?.twitter}</TableCell>
+                <TableCell>{user?.whatsapp}</TableCell>
+                <TableCell>{user?.linkedin}</TableCell>
+                <TableCell>{user?.tiktok}</TableCell>
+                <TableCell>{user?.snapchat}</TableCell>
+                <TableCell>{user?.youtube}</TableCell>
+                {/* <TableCell>{user?.image}</TableCell> */}
+                {/* <TableCell><img src={user?.image} alt="img" /></TableCell> */}
+                {/* <TableCell>
+                  {user?.image && (
+                    <div className="relative h-20 w-20">
+                      <Image src={user?.image} layout="fill" className="rounded-full" objectFit="cover"  alt="User Image" />
+                    </div>
+                  )}
+                </TableCell> */}
+                <TableCell>
+                  <EditDialogueComponent user={user} getUserData={getUserData} />
+                  <Button className="mt-2" onClick={() => deleteUser(user?.id)}>
+                    Delete
+                    {/* <DeleteButton url={user?.image} /> */}
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
           </Table>
         </div>
-      </main>
-    </>
+    </main>
   );
 };
-
-// type Payment = {
-//   username : string;
-//   mobile : string;
-//   address : string;
-//   image : string;
-// }
-
-// export const columns: ColumnDef<Payment>[] = [
-//   {
-//     accessorKey: "username",
-//     header: "Username",
-//   },
-//   {
-//     accessorKey: "mobile",
-//     header: "Mobile",
-//   },
-//   {
-//     accessorKey: "address",
-//     header: "Address",
-//   },
-//   {
-//     accessorKey: "image",
-//     header: "Image",
-//   },
-// ]
 
 export default Users;

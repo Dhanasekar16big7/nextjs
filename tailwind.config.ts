@@ -29,6 +29,7 @@ const config = {
       height: {
         '14.5' : '61px',
         '8.5' : '34px',
+        '500': '500px',
       },
       colors: {
         border: "hsl(var(--border))",
