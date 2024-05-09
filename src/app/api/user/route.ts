@@ -22,10 +22,10 @@ export async function POST(req: Request) {
     const response = await client.query(`INSERT INTO 
     users (username, mobile, address, email, position, company, website, aboutme, facebook, instagram, twitter, whatsapp, linkedin, tiktok, snapchat, youtube) 
   VALUES 
-    ('${request.username}', '${request.mobile}', '${request.address}', '${request.email}', '${request.position}', '${request.company}', '${request.website}', '${request.aboutme}', '${request.facebook}', '${request.instagram}', '${request.twitter}', '${request.whatsapp}', '${request.linkedin}', '${request.tiktok}', '${request.snapchat}', '${request.youtube}';`);
+    ('${request.username}', '${request.mobile}', '${request.address}', '${request.email}', '${request.position}', '${request.company}', '${request.website}', '${request.aboutme}', '${request.facebook}', '${request.instagram}', '${request.twitter}', '${request.whatsapp}', '${request.linkedin}', '${request.tiktok}', '${request.snapchat}', '${request.youtube}');`);
     revalidateTag('users');
   }catch(err){
-    console.log(err);
+    console.error("Error ", err);
   }
   return NextResponse.json(request);
   

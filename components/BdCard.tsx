@@ -69,7 +69,7 @@ const BdCard: React.FC<Props> = ({ userId }) => {
       filteredData && filteredData.length ? (
       filteredData.map((user: any) => (
         <div className="mx-auto" key={user.id}>
-        <Card className="md:w-[360px] w-full bg-cardbg pb-3.5">
+        <Card className="md:w-[360px] w-full bg-cardbg pb-3.5 min-h-full">
           <CardHeader className="px-5 py-4 pb-20 space-y-1 card-header text-white rounded-lg pt-14 flex flex-col items-center md:flex-row gap-2">
             <div>
               <Image
@@ -77,7 +77,7 @@ const BdCard: React.FC<Props> = ({ userId }) => {
                 alt="profile"
                 width={140}
                 height={140}
-                className="w-28 h-28 rounded-full border-4 border-white"
+                className=" rounded-full border-4 border-white"
               />
             </div>
           <div>

@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import EditDialogueComponent from "@/components/EditDialogueComponent";
+import { Trash2 } from "lucide-react";
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -28,7 +29,7 @@ const formSchema = z.object({
   }),
   mobile: z.string().min(10, {
     message: "Mobile number must be at least 10 characters.",
-  }).max(10, {
+  }).max(12, {
     message: "Mobile number must be at most 10 characters.",
   }),
   address: z.string().min(10, {
@@ -243,18 +244,18 @@ const Users = () => {
                 <TableHead>Mobile</TableHead>
                 <TableHead>Address</TableHead>
                 <TableHead>Email</TableHead>
-                <TableHead>Position</TableHead>
+                {/* <TableHead>Position</TableHead>
                 <TableHead>Company</TableHead>
                 <TableHead>Website</TableHead>
-                <TableHead>About Me</TableHead>
-                <TableHead>Facebook</TableHead>
+                <TableHead>About Me</TableHead> */}
+                {/* <TableHead>Facebook</TableHead>
                 <TableHead>Instagram</TableHead>
                 <TableHead>Twitter</TableHead>
                 <TableHead>Whatsapp</TableHead>
                 <TableHead>Linkedin</TableHead>
                 <TableHead>Tiktok</TableHead>
                 <TableHead>Snapchat</TableHead>
-                <TableHead>Youtube</TableHead>
+                <TableHead>Youtube</TableHead> */}
                 {/* <TableHead>Image</TableHead> */}
               </TableRow>
             </TableHeader>
@@ -265,18 +266,18 @@ const Users = () => {
                 <TableCell>{user?.mobile}</TableCell>
                 <TableCell>{user?.address}</TableCell>
                 <TableCell>{user?.email}</TableCell>
-                <TableCell>{user?.position}</TableCell>
+                {/* <TableCell>{user?.position}</TableCell>
                 <TableCell>{user?.company}</TableCell>
                 <TableCell>{user?.website}</TableCell>
-                <TableCell>{user?.aboutme}</TableCell>
-                <TableCell>{user?.facebook}</TableCell>
+                <TableCell>{user?.aboutme}</TableCell> */}
+                {/* <TableCell>{user?.facebook}</TableCell>
                 <TableCell>{user?.instagram}</TableCell>
                 <TableCell>{user?.twitter}</TableCell>
                 <TableCell>{user?.whatsapp}</TableCell>
                 <TableCell>{user?.linkedin}</TableCell>
                 <TableCell>{user?.tiktok}</TableCell>
                 <TableCell>{user?.snapchat}</TableCell>
-                <TableCell>{user?.youtube}</TableCell>
+                <TableCell>{user?.youtube}</TableCell> */}
                 {/* <TableCell>{user?.image}</TableCell> */}
                 {/* <TableCell><img src={user?.image} alt="img" /></TableCell> */}
                 {/* <TableCell>
@@ -286,10 +287,10 @@ const Users = () => {
                     </div>
                   )}
                 </TableCell> */}
-                <TableCell>
+                <TableCell className="flex gap-2">
                   <EditDialogueComponent user={user} getUserData={getUserData} />
-                  <Button className="mt-2" onClick={() => deleteUser(user?.id)}>
-                    Delete
+                  <Button className=" px-1.5 py-1.5 w-8 h-8" onClick={() => deleteUser(user?.id)}>
+                  <Trash2 className="w-5 h-5" />
                     {/* <DeleteButton url={user?.image} /> */}
                   </Button>
                 </TableCell>

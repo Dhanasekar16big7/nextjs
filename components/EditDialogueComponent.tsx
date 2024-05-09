@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Pencil } from "lucide-react";
 
 interface EditDialogComponentProps {
   user: any;
@@ -66,7 +67,7 @@ const EditDialogueComponent: React.FC<EditDialogComponentProps> = ({ user, getUs
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Edit Profile</Button>
+        <Button className="px-2 py-2 w-8 h-8"><Pencil className="w-5 h-5" /></Button>
       </DialogTrigger>
       <DialogContent className="min-[0px]:max-w-sm min-[0px]:rounded-lg h-500 overflow-y-scroll border-0 edit-form">
         <DialogHeader>
