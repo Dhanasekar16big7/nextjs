@@ -24,7 +24,10 @@ import EditDialogueComponent from "@/components/EditDialogueComponent";
 import { Trash2 } from "lucide-react";
 
 const formSchema = z.object({
-  username: z.string().min(2, {
+  fname: z.string().min(2, {
+    message: "Username must be at least 2 characters.",
+  }),
+  lname: z.string().min(0, {
     message: "Username must be at least 2 characters.",
   }),
   mobile: z.string().min(10, {
@@ -81,7 +84,8 @@ const formSchema = z.object({
 
 interface User {
   id: number;
-  username: string;
+  fname: string;
+  lname: string;
   mobile: string;
   address: string;
   email: string;
@@ -107,7 +111,8 @@ const Users = () => {
   const control = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      fname: "",
+      lname : "",
       mobile: "",
       address: "",
       email: "",
@@ -232,7 +237,7 @@ const Users = () => {
   // } 
 
   return (
-    <main className="flex min-h-screen flex-col gap-5 p-0 w-full">
+    <div className="flex min-h-screen flex-col gap-5 p-0 w-full">
       <PageTitle title="Users" />
       <DialogComponent open={open} setOpen={setOpen} control={control} onSubmit={onSubmit}/>
       <div className="container px-5 user-table overflow-x-scroll">
@@ -240,7 +245,8 @@ const Users = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Username</TableHead>
+                <TableHead>First name</TableHead>
+                <TableHead>Last name</TableHead>
                 <TableHead>Mobile</TableHead>
                 <TableHead>Address</TableHead>
                 <TableHead>Email</TableHead>
@@ -262,7 +268,8 @@ const Users = () => {
             <TableBody>
             {fetchUserData.map((user, index) => (
               <TableRow key={index}>
-                <TableCell className="font-medium">{user?.username}</TableCell>
+                <TableCell className="font-medium">{user?.fname}</TableCell>
+                <TableCell className="font-medium">{user?.lname}</TableCell>
                 <TableCell>{user?.mobile}</TableCell>
                 <TableCell>{user?.address}</TableCell>
                 <TableCell>{user?.email}</TableCell>
@@ -299,7 +306,7 @@ const Users = () => {
           </TableBody>
           </Table>
         </div>
-    </main>
+    </div>
   );
 };
 

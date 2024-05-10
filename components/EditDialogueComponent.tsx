@@ -74,67 +74,71 @@ const EditDialogueComponent: React.FC<EditDialogComponentProps> = ({ user, getUs
           <DialogTitle className="text-center mb-1">Edit profile</DialogTitle>
         </DialogHeader>
         <div>
-          <Label>Username</Label>
-          <Input name="username" value={editedUser.username} onChange={handleChange} />
+          <Label className="block mb-2">First name</Label>
+          <Input name="fname" value={editedUser.fname} onChange={handleChange} />
         </div>
         <div>
-          <Label>Mobile</Label>
+          <Label className="block mb-2">Last name</Label>
+          <Input name="lname" value={editedUser.lname} onChange={handleChange} />
+        </div>
+        <div>
+          <Label className="block mb-2">Mobile</Label>
           <Input name="mobile" value={editedUser.mobile} onChange={handleChange} />
         </div>
         <div>
-          <Label>Address</Label>
+          <Label className="block mb-2">Address</Label>
           <Input name="address" value={editedUser.address} onChange={handleChange} />
         </div>
         <div>
-          <Label>Email</Label>
+          <Label className="block mb-2">Email</Label>
           <Input name="email" value={editedUser.email} onChange={handleChange} />
         </div>
         <div>
-          <Label>Position</Label>
+          <Label className="block mb-2">Position</Label>
           <Input name="position" value={editedUser.position} onChange={handleChange} />
         </div>
         <div>
-          <Label>Company</Label>
+          <Label className="block mb-2">Company</Label>
           <Input name="company" value={editedUser.company} onChange={handleChange} />
         </div>
         <div>
-          <Label>Website</Label>
+          <Label className="block mb-2">Website</Label>
           <Input name="website" value={editedUser.website} onChange={handleChange} />
         </div>
         <div>
-          <Label>About me</Label>
+          <Label className="block mb-2">About me</Label>
           <Input name="aboutme" value={editedUser.aboutme} onChange={handleChange} />
         </div>
         <div>
-          <Label>Facebook</Label>
+          <Label className="block mb-2">Facebook</Label>
           <Input name="facebook" value={editedUser.facebook} onChange={handleChange} />
         </div>
         <div>
-          <Label>Instagram</Label>
+          <Label className="block mb-2">Instagram</Label>
           <Input name="instagram" value={editedUser.instagram} onChange={handleChange} />
         </div>
         <div>
-          <Label>Twitter</Label>
+          <Label className="block mb-2">Twitter</Label>
           <Input name="twitter" value={editedUser.twitter} onChange={handleChange} />
         </div>
         <div>
-          <Label>Whatsapp</Label>
+          <Label className="block mb-2">Whatsapp</Label>
           <Input name="whatsapp" value={editedUser.whatsapp} onChange={handleChange} />
         </div>
         <div>
-          <Label>LinkedIn</Label>
+          <Label className="block mb-2">LinkedIn</Label>
           <Input name="linkedin" value={editedUser.linkedin} onChange={handleChange} />
         </div>
         <div>
-          <Label>Tiktok</Label>
+          <Label className="block mb-2">Tiktok</Label>
           <Input name="tiktok" value={editedUser.tiktok} onChange={handleChange} />
         </div>
         <div>
-          <Label>Snapchat</Label>
+          <Label className="block mb-2">Snapchat</Label>
           <Input name="snapchat" value={editedUser.snapchat} onChange={handleChange} />
         </div>
         <div>
-          <Label>Youtube</Label>
+          <Label className="block mb-2">Youtube</Label>
           <Input name="youtube" value={editedUser.youtube} onChange={handleChange} />
         </div>
         {/* <div>

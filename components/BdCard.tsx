@@ -11,25 +11,6 @@ interface Props {
   userId: string;
 }
 
-// interface User {
-//   id: number;
-//   username: string;
-//   mobile: string;
-//   address: string;
-//   email: string;
-//   website: string;
-//   aboutme: string;
-//   facebook: string;
-//   instagram: string;
-//   twitter: string;
-//   whatsapp: string;
-//   linkedin: string;
-//   tiktok: string;
-//   snapchat: string;
-//   youtube: string;
-//   image: string;
-// }
-
 const BdCard: React.FC<Props> = ({ userId }) => {
   const [fetchUserData, setFetchUserData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -52,13 +33,14 @@ const BdCard: React.FC<Props> = ({ userId }) => {
   }, [userId]); // Trigger fetch only when userId changes
 
   const nameConversion = (name: string) => {
-    return name.split(" ").join("_").toLowerCase();
+    return name.split(" ").join("-").toLowerCase();
   }
 
   useEffect(() => {
     // Filter data when fetchUserData changes
     const filteredData = fetchUserData.filter((user: any) => {
-      return nameConversion(user.username) === userId.toLowerCase(); 
+      const username = user.fname + " " + user.lname;
+      return nameConversion(username) === userId.toLowerCase() || user.fname.toLowerCase() === userId.toLowerCase() || user.lname.toLowerCase() === userId.toLowerCase(); 
     });
     setFilteredData(filteredData);
   }, [fetchUserData, userId]); // Update filteredData when fetchUserData or userId changes
@@ -82,7 +64,7 @@ const BdCard: React.FC<Props> = ({ userId }) => {
             </div>
           <div>
             <div className="text-center md:text-start">
-                <p className="font-bold text-base text-usernamecolor">{user.username}</p>
+                <p className="font-bold text-base text-usernamecolor">{`${user.fname} ${user.lname}`}</p>
                 <span className="block text-xxs text-cardcontentcolor py-0.5">{user.position}</span>
                 <span className="block text-xxs text-cardcontentcolor">{user.company}</span>
             </div>

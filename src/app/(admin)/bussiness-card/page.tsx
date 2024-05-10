@@ -8,6 +8,7 @@ const BussinessCard = () => {
         <PageTitle title="Bussiness Card" />
         {/* <div className="w-full container flex justify-center align-center p-5"> */}
             {/* <BdCard /> */}
+            {/* <h2>Bussiness Card Page</h2> */}
         {/* </div> */}
         </main>
         </>
