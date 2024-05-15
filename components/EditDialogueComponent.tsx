@@ -11,10 +11,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Pencil } from "lucide-react";
-
+import supabase from "@/utils/supabase/client";
 interface EditDialogComponentProps {
   user: any;
   getUserData: () => void;
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  // handleFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const EditDialogueComponent: React.FC<EditDialogComponentProps> = ({ user, getUserData }) => {
@@ -29,40 +32,40 @@ const EditDialogueComponent: React.FC<EditDialogComponentProps> = ({ user, getUs
     }));
   };
 
-  const handleSave = async () => {
+  const handleSave = async (user: any) => {
     try {
-      const res = await fetch("/api/user", {
-        method: "PUT",
-        body: JSON.stringify(editedUser),
-        cache: "no-store",
-      });
-      const responseData = await res.json();
-      console.log("responseData edit ", responseData);
-        getUserData(); // Reload user data after successful update
-        setOpen(false);
-    } catch (error) {
+      const {data , error} = await supabase.from("Users").update(editedUser).eq("id", editedUser.id).select();
+      if(error) throw error;
+      console.log("edit data ", data);
+      getUserData(); // Reload user data after successful update
+      setOpen(false);
+    }
+    catch (error) {
       console.error("edit page error ", error);
     }
   };
 
-  // const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = event.target.files?.[0];
-  //   try {
-  //     const res = await fetch(`/api/file?filename=${file!.name}`, {
-  //       method: 'POST',
-  //       body: file!,
-  //     });
-  //     const newBlob = await res.json();
-  //     const url = newBlob.url;
-  //     console.log("responseData upload edit ", url);
-  //     setEditedUser((prevUser: any) => ({
-  //       ...prevUser,
-  //       image: url,
-  //     }))
-  //   } catch (error) {
-  //     console.error("upload error ", error);
-  //   }
-  // };
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+  
+    try {
+      const { data, error } = await supabase.storage.from("Avatars").upload(file.name, file, { cacheControl: '3600', upsert: true });
+      if (error) throw error;
+      
+      console.log("Uploaded file data:", data);
+      const { data: url } = supabase.storage.from("Avatars").getPublicUrl(data.path);
+      console.log("url ", url.publicUrl);
+      // Assuming data contains the URL to access the uploaded image, set it in the form
+      setEditedUser((prevUser: any) => ({
+        ...prevUser,
+        image: url.publicUrl,
+      }))
+    } catch (error :any) {
+      console.error("Error uploading file:", error.message);
+      alert('Image already uploaded. Please try to upload another image');
+    }
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -75,11 +78,11 @@ const EditDialogueComponent: React.FC<EditDialogComponentProps> = ({ user, getUs
         </DialogHeader>
         <div>
           <Label className="block mb-2">First name</Label>
-          <Input name="fname" value={editedUser.fname} onChange={handleChange} />
+          <Input name="first_name" value={editedUser.first_name} onChange={handleChange} />
         </div>
         <div>
           <Label className="block mb-2">Last name</Label>
-          <Input name="lname" value={editedUser.lname} onChange={handleChange} />
+          <Input name="last_name" value={editedUser.last_name} onChange={handleChange} />
         </div>
         <div>
           <Label className="block mb-2">Mobile</Label>
@@ -94,8 +97,8 @@ const EditDialogueComponent: React.FC<EditDialogComponentProps> = ({ user, getUs
           <Input name="email" value={editedUser.email} onChange={handleChange} />
         </div>
         <div>
-          <Label className="block mb-2">Position</Label>
-          <Input name="position" value={editedUser.position} onChange={handleChange} />
+          <Label className="block mb-2">Designation</Label>
+          <Input name="designation" value={editedUser.designation} onChange={handleChange} />
         </div>
         <div>
           <Label className="block mb-2">Company</Label>
@@ -106,8 +109,8 @@ const EditDialogueComponent: React.FC<EditDialogComponentProps> = ({ user, getUs
           <Input name="website" value={editedUser.website} onChange={handleChange} />
         </div>
         <div>
-          <Label className="block mb-2">About me</Label>
-          <Input name="aboutme" value={editedUser.aboutme} onChange={handleChange} />
+          <Label className="block mb-2">About</Label>
+          <Input name="about" value={editedUser.about} onChange={handleChange} />
         </div>
         <div>
           <Label className="block mb-2">Facebook</Label>
@@ -141,13 +144,13 @@ const EditDialogueComponent: React.FC<EditDialogComponentProps> = ({ user, getUs
           <Label className="block mb-2">Youtube</Label>
           <Input name="youtube" value={editedUser.youtube} onChange={handleChange} />
         </div>
-        {/* <div>
-          <Label>Image</Label>
-          {editedUser.image && (
-            <img src={editedUser.image} className="rounded-full mt-2" alt="User Image" style={{ maxWidth: "110px", height: "110px", objectFit: "cover" }} />
-          )}
-          <Input id="picture" className="mt-2" type="file" accept="image/png" onChange={handleFileChange} />
-        </div> */}
+        <div>
+        <Label>Image</Label>
+        {editedUser.image && (
+          <img src={editedUser.image} className="rounded-full mt-2" alt="User Image" style={{ maxWidth: "110px", height: "110px", objectFit: "cover" }} />
+        )}
+        <Input id="picture" className="mt-2" type="file" accept="image/png" onChange={handleFileChange} />
+        </div>
         <DialogFooter className="flex md:justify-center">
           <div className="text-center">
             <Button onClick={handleSave}>Save changes</Button>

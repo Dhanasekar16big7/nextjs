@@ -22,13 +22,14 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import EditDialogueComponent from "@/components/EditDialogueComponent";
 import { Trash2 } from "lucide-react";
+import supabase from "@/utils/supabase/client";
 
 const formSchema = z.object({
-  fname: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+  first_name : z.string().min(2, {
+    message: "First name must be at least 2 characters.",
   }),
-  lname: z.string().min(0, {
-    message: "Username must be at least 2 characters.",
+  last_name: z.string().min(2, {
+    message: "Last name must be at least 2 characters.",
   }),
   mobile: z.string().min(10, {
     message: "Mobile number must be at least 10 characters.",
@@ -41,8 +42,8 @@ const formSchema = z.object({
   email : z.string().email({
     message: "Please provide a valid email address.",
   }),
-  position : z.string().min(2, {
-    message: "Position must be at least 2 characters.",
+  designation : z.string().min(2, {
+    message: "Designation must be at least 2 characters.",
   }),
   company : z.string().min(2, {
     message: "Company must be at least 2 characters.",
@@ -50,7 +51,7 @@ const formSchema = z.object({
   website : z.string().url({
     message: "Please provide a valid URL for the website.",
   }),
-  aboutme : z.string().min(10, {
+  about : z.string().min(10, {
     message: "About me must be at least 10 characters.",
   }),
   facebook : z.string().url({
@@ -77,22 +78,22 @@ const formSchema = z.object({
   youtube : z.string().url({
     message: "Please provide a valid URL for the youtube.",
   }),
-  // image: z.string().url({
-  //   message: "Please provide a valid URL for the image.",
-  // }),
+  image: z.string().url({
+    message: "Please provide a valid URL for the image.",
+  }),
 });
 
 interface User {
   id: number;
-  fname: string;
-  lname: string;
+  first_name: string;
+  last_name: string;
   mobile: string;
   address: string;
   email: string;
-  position: string;
+  designation: string;
   company: string;
   website: string;
-  aboutme: string;
+  about: string;
   facebook: string;
   instagram: string;
   twitter: string;
@@ -101,7 +102,8 @@ interface User {
   tiktok: string;
   snapchat: string;
   youtube: string;
-  // image: string;
+  image: string;
+  // username: string;
 }
 
 const Users = () => {
@@ -111,15 +113,15 @@ const Users = () => {
   const control = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fname: "",
-      lname : "",
+      first_name: "",
+      last_name : "",
       mobile: "",
       address: "",
       email: "",
-      position: "",
+      designation: "",
       company: "",
       website: "",
-      aboutme: "",
+      about: "",
       facebook: "",
       instagram: "",
       twitter: "",
@@ -128,118 +130,84 @@ const Users = () => {
       tiktok: "",
       snapchat: "",
       youtube: "",
-      // image: "",
+      image: "",
+      // username: "",
     },
   });
 
+
   const getUserData = async () => {
-    try {
-      const res = await fetch("/api/user", {
-        next: {
-          tags: ["users"],
-        },
-      });
-      const data = await res.json();
-      if (data && data.data && data.data.rows) {
-        setFetchUserData(data.data.rows);
-        console.log("data.data.rows ", data.data.rows);
-      } 
-      // else {
-      //   console.error("Unexpected API response format: ", data);
-      // }
-      // setFetchUserData(data.data.rows);
-    } catch (error) {
-      console.error(error);
+    try{
+      const { data, error } = await supabase.from("Users").select("*");
+      if(error) throw error;
+      setFetchUserData(data);
+      console.log("fetchUserData ", data);
     }
-  };
+    catch(err : any) {
+      console.error("Error ", err.message);
+  }
+}
 
   useEffect(() => {
     getUserData();
   }, []);
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("values ", values);
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+  
     try {
-      const res = await fetch("/api/user", {
-        method: "POST",
-        body: JSON.stringify(values),
-      });
-      const responseData = await res.json();
-
-      console.log("API Response Data:", responseData);
-
-      if (responseData && responseData.data && responseData.data.rows) {
-        setFetchUserData(responseData.data.rows);
-      } 
-      // else {
-      //   console.error("Unexpected API response format:", responseData);
-      // }
-      getUserData();
-      control.reset();
-      setOpen(false);
-    } catch (error) {
-      console.error(error);
+      const { data, error } = await supabase.storage.from("Avatars").upload(file.name, file, { cacheControl: '3600', upsert: true });
+      if (error) throw error;
+      console.log("Uploaded file data:", data);
+      const { data: url } = supabase.storage.from("Avatars").getPublicUrl(data.path);
+      console.log("url ", url.publicUrl);
+      // Assuming data contains the URL to access the uploaded image, set it in the form
+      control.setValue('image', url.publicUrl);
+    } 
+    catch (error :any) {
+      console.error("Error uploading file:", error.message);
+      alert('Image already uploaded. Please try to upload another image');
     }
   };
 
-  // const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = event.target.files?.[0];
-  //   const response = await fetch(`/api/file?filename=${file!.name}`, {
-  //     method: 'POST',
-  //     body: file!,
-  //   });
-  //   const newBlob = await response.json();
-  //   const url = newBlob.url;
-  //   console.log("responseData upload add ", url);
-  //   control.setValue('image', url);
-  // };
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      const { data, error } = await supabase.from("Users").insert([values]).select().single();
+      const username = values.first_name.toLowerCase() + values.last_name.toLowerCase() + Math.floor(Math.random() * 10000);
+      const { data: userData, error: userError } = await supabase.from("Users").update({ username: username }).eq("id", data.id);
+      if(error) throw error;
+      console.log("data ", data);
+      getUserData();
+      control.reset();
+      setOpen(false);
+    }
+    catch(err : any) {
+      console.error("Error ", err.message);
+    }
+  };
 
   const deleteUser = async (id: number) => {
     console.log("ID:", id);
     const confirmed = confirm('Are you sure you want to delete this user?');
     if (confirmed) {
       try {
-        const res = await axios.delete(`/api/user`, {
-          params: {
-            id: id
-          }
-        });
+        const {data , error} = await supabase.from("Users").delete().eq("id", id);
+        console.log("data ", data);
+        if(error) throw error;
         getUserData(); // Reload user data after successful deletion
-        if(res.status === 200) {
-          router.refresh();
-        }
-      } catch (error) {
-        console.error("page error ",error);
+      }
+      catch(err : any) {
+        console.error("Error ", err.message);
       }
     }
   };
 
-  // const editData = async (user : any) => {
-  //   console.log("Username:", user);
-  //   try{
-  //     const res = await fetch("/api/user",{
-  //       method: "PUT",
-  //       body: JSON.stringify(user),
-  //     });
-  //     const responseData = await res.json();
-  //     console.log("responseData edit ",responseData);
-  //     if (responseData && responseData.data && responseData.data.rows) {
-  //       setFetchUserData(responseData.data.rows);
-  //     } else {
-  //       console.error("Unexpected API response format:", responseData);
-  //     }
-  //     control.reset();
-  //   }
-  //   catch(error){
-  //     console.error("edit page error ",error);
-  //   }
-
-  // } 
-
   return (
     <div className="flex min-h-screen flex-col gap-5 p-0 w-full">
       <PageTitle title="Users" />
-      <DialogComponent open={open} setOpen={setOpen} control={control} onSubmit={onSubmit}/>
+      <DialogComponent open={open} setOpen={setOpen} control={control} onSubmit={onSubmit} handleFileChange={handleFileChange}/>
       <div className="container px-5 user-table overflow-x-scroll">
           {/* <DataTable columns={columns} data={fetchUserData} /> */}
           <Table>
@@ -248,45 +216,26 @@ const Users = () => {
                 <TableHead>First name</TableHead>
                 <TableHead>Last name</TableHead>
                 <TableHead>Mobile</TableHead>
-                <TableHead>Address</TableHead>
+                <TableHead className="w-64">Address</TableHead>
                 <TableHead>Email</TableHead>
-                {/* <TableHead>Position</TableHead>
-                <TableHead>Company</TableHead>
-                <TableHead>Website</TableHead>
-                <TableHead>About Me</TableHead> */}
-                {/* <TableHead>Facebook</TableHead>
-                <TableHead>Instagram</TableHead>
-                <TableHead>Twitter</TableHead>
-                <TableHead>Whatsapp</TableHead>
-                <TableHead>Linkedin</TableHead>
-                <TableHead>Tiktok</TableHead>
-                <TableHead>Snapchat</TableHead>
-                <TableHead>Youtube</TableHead> */}
-                {/* <TableHead>Image</TableHead> */}
+                <TableHead>Image</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
             {fetchUserData.map((user, index) => (
               <TableRow key={index}>
-                <TableCell className="font-medium">{user?.fname}</TableCell>
-                <TableCell className="font-medium">{user?.lname}</TableCell>
+                <TableCell className="font-medium">{user?.first_name}</TableCell>
+                <TableCell className="font-medium">{user?.last_name}</TableCell>
                 <TableCell>{user?.mobile}</TableCell>
                 <TableCell>{user?.address}</TableCell>
                 <TableCell>{user?.email}</TableCell>
-                {/* <TableCell>{user?.position}</TableCell>
-                <TableCell>{user?.company}</TableCell>
-                <TableCell>{user?.website}</TableCell>
-                <TableCell>{user?.aboutme}</TableCell> */}
-                {/* <TableCell>{user?.facebook}</TableCell>
-                <TableCell>{user?.instagram}</TableCell>
-                <TableCell>{user?.twitter}</TableCell>
-                <TableCell>{user?.whatsapp}</TableCell>
-                <TableCell>{user?.linkedin}</TableCell>
-                <TableCell>{user?.tiktok}</TableCell>
-                <TableCell>{user?.snapchat}</TableCell>
-                <TableCell>{user?.youtube}</TableCell> */}
-                {/* <TableCell>{user?.image}</TableCell> */}
-                {/* <TableCell><img src={user?.image} alt="img" /></TableCell> */}
+                <TableCell>
+                  {user?.image && (
+                      <div className="relative h-20 w-20">
+                        <img src={user?.image} className="rounded-full object-cover" alt="User Image" />
+                      </div>
+                    )}
+                </TableCell>
                 {/* <TableCell>
                   {user?.image && (
                     <div className="relative h-20 w-20">
@@ -294,11 +243,10 @@ const Users = () => {
                     </div>
                   )}
                 </TableCell> */}
-                <TableCell className="flex gap-2">
-                  <EditDialogueComponent user={user} getUserData={getUserData} />
+                <TableCell className="flex gap-2 justify-center items-center">
+                  <EditDialogueComponent user={user} getUserData={getUserData} setOpen={setOpen} open={open} />
                   <Button className=" px-1.5 py-1.5 w-8 h-8" onClick={() => deleteUser(user?.id)}>
                   <Trash2 className="w-5 h-5" />
-                    {/* <DeleteButton url={user?.image} /> */}
                   </Button>
                 </TableCell>
               </TableRow>

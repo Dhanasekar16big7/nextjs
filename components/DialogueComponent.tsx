@@ -6,12 +6,12 @@ import UserForm from "@/components/UserForm";
 interface DialogComponentProps {
   control: any;
   onSubmit: any;
-  // handleFileChange: any;
+  handleFileChange: any;
   open : any;
   setOpen : any
 }
 
-const DialogComponent: React.FC<DialogComponentProps> = ({ control, onSubmit, open, setOpen }) => {
+const DialogComponent: React.FC<DialogComponentProps> = ({ control, onSubmit, open, setOpen, handleFileChange }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -20,8 +20,8 @@ const DialogComponent: React.FC<DialogComponentProps> = ({ control, onSubmit, op
         </Button>
       </DialogTrigger>
       <DialogContent className="min-[0px]:max-w-sm min-[0px]:rounded-lg">
-        <UserForm control={control} onSubmit={onSubmit} />
-        {/* <UserForm control={control} onSubmit={onSubmit} handleFileChange={handleFileChange} /> */}
+        {/* <UserForm control={control} onSubmit={onSubmit} /> */}
+        <UserForm control={control} onSubmit={onSubmit} handleFileChange={handleFileChange} />
       </DialogContent>
     </Dialog>
   );
