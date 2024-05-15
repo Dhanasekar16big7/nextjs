@@ -151,7 +151,7 @@ const BdCard: React.FC<Props> = ({ userId }) => {
     )
     : (
       <div className="w-full h-screen flex justify-center items-center font-bold text-3xl">
-        <h1>No Data Found</h1>
+        <h1>Loading...</h1>
       </div>
     )
     }
