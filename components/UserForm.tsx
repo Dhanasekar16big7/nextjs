@@ -172,7 +172,7 @@ const UserForm: React.FC<UserFormProps> = ({ control, onSubmit , handleFileChang
             name="facebook"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Facebook <span className="text-red-500">*</span></FormLabel>
+                <FormLabel>Facebook</FormLabel>
                 <Input placeholder="Enter your facebook" {...field} onChange={(e) => field.onChange(trimAndTypecast(e.target.value))} />
                 <FormMessage />
               </FormItem>
@@ -183,7 +183,7 @@ const UserForm: React.FC<UserFormProps> = ({ control, onSubmit , handleFileChang
             name="instagram"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Instagram <span className="text-red-500">*</span></FormLabel>
+                <FormLabel>Instagram</FormLabel>
                 <Input placeholder="Enter your instagram" {...field} onChange={(e) => field.onChange(trimAndTypecast(e.target.value))} />
                 <FormMessage />
               </FormItem>
@@ -194,7 +194,7 @@ const UserForm: React.FC<UserFormProps> = ({ control, onSubmit , handleFileChang
             name="twitter"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Twitter <span className="text-red-500">*</span></FormLabel>
+                <FormLabel>Twitter</FormLabel>
                 <Input placeholder="Enter your twitter" {...field} onChange={(e) => field.onChange(trimAndTypecast(e.target.value))} />
                 <FormMessage />
               </FormItem>
@@ -205,7 +205,7 @@ const UserForm: React.FC<UserFormProps> = ({ control, onSubmit , handleFileChang
             name="whatsapp"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Whatsapp <span className="text-red-500">*</span></FormLabel>
+                <FormLabel>Whatsapp</FormLabel>
                 <Input placeholder="Enter your whatsapp" {...field} onChange={(e) => field.onChange(trimAndTypecast(e.target.value))} />
                 <FormMessage />
               </FormItem>
@@ -216,7 +216,7 @@ const UserForm: React.FC<UserFormProps> = ({ control, onSubmit , handleFileChang
             name="linkedin"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Linkedin <span className="text-red-500">*</span></FormLabel>
+                <FormLabel>Linkedin</FormLabel>
                 <Input placeholder="Enter your linkedin" {...field} onChange={(e) => field.onChange(trimAndTypecast(e.target.value))} />
                 <FormMessage />
               </FormItem>
@@ -227,7 +227,7 @@ const UserForm: React.FC<UserFormProps> = ({ control, onSubmit , handleFileChang
             name="tiktok"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Tiktok <span className="text-red-500">*</span></FormLabel>
+                <FormLabel>Tiktok</FormLabel>
                 <Input placeholder="Enter your tiktok" {...field} onChange={(e) => field.onChange(trimAndTypecast(e.target.value))} />
                 <FormMessage />
               </FormItem>
@@ -238,7 +238,7 @@ const UserForm: React.FC<UserFormProps> = ({ control, onSubmit , handleFileChang
             name="snapchat"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Snapchat <span className="text-red-500">*</span></FormLabel>
+                <FormLabel>Snapchat</FormLabel>
                 <Input placeholder="Enter your snapchat" {...field} onChange={(e) => field.onChange(trimAndTypecast(e.target.value))} />
                 <FormMessage />
               </FormItem>
@@ -249,7 +249,7 @@ const UserForm: React.FC<UserFormProps> = ({ control, onSubmit , handleFileChang
             name="youtube"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Youtube <span className="text-red-500">*</span></FormLabel>
+                <FormLabel>Youtube</FormLabel>
                 <Input placeholder="Enter your youtube" {...field} onChange={(e) => field.onChange(trimAndTypecast(e.target.value))} />
                 <FormMessage />
               </FormItem>

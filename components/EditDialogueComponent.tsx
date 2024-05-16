@@ -147,7 +147,9 @@ const EditDialogueComponent: React.FC<EditDialogComponentProps> = ({ user, getUs
         <div>
         <Label>Image</Label>
         {editedUser.image && (
-          <img src={editedUser.image} className="rounded-full mt-2" alt="User Image" style={{ maxWidth: "110px", height: "110px", objectFit: "cover" }} />
+          <div className="relative h-20 w-20 rounded-full my-2" style={{backgroundImage: `url(${editedUser?.image})`, backgroundPosition: 'top', backgroundSize: 'cover', backgroundRepeat: 'no-repeat'}}>
+        </div>
+          // <img src={editedUser.image} className="rounded-full mt-2" alt="User Image" style={{ maxWidth: "110px", height: "110px", objectFit: "cover" }} />
         )}
         <Input id="picture" className="mt-2" type="file" accept="image/png" onChange={handleFileChange} />
         </div>

@@ -21,8 +21,11 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import EditDialogueComponent from "@/components/EditDialogueComponent";
-import { Trash2 } from "lucide-react";
+import { Eye, Trash2 } from "lucide-react";
 import supabase from "@/utils/supabase/client";
+import { Span } from "next/dist/trace";
+import { profile } from "console";
+import Link from "next/link";
 
 const formSchema = z.object({
   first_name : z.string().min(2, {
@@ -54,30 +57,30 @@ const formSchema = z.object({
   about : z.string().min(10, {
     message: "About me must be at least 10 characters.",
   }),
-  facebook : z.string().url({
-    message: "Please provide a valid URL for the facebook.",
-  }),
-  instagram : z.string().url({
-    message: "Please provide a valid URL for the instagram.",
-  }),
-  twitter : z.string().url({
-    message: "Please provide a valid URL for the twitter.",
-  }),
-  whatsapp : z.string().url({
-    message: "Please provide a valid URL for the whatsapp.",
-  }),
-  linkedin : z.string().url({
-    message: "Please provide a valid URL for the linkedin.",
-  }),
-  tiktok : z.string().url({
-    message: "Please provide a valid URL for the tiktok.",
-  }),
-  snapchat : z.string().url({
-    message: "Please provide a valid URL for the instagram.",
-  }),
-  youtube : z.string().url({
-    message: "Please provide a valid URL for the youtube.",
-  }),
+  // facebook : z.string().url({
+  //   message: "Please provide a valid URL for the facebook.",
+  // }),
+  // instagram : z.string().url({
+  //   message: "Please provide a valid URL for the instagram.",
+  // }),
+  // twitter : z.string().url({
+  //   message: "Please provide a valid URL for the twitter.",
+  // }),
+  // whatsapp : z.string().url({
+  //   message: "Please provide a valid URL for the whatsapp.",
+  // }),
+  // linkedin : z.string().url({
+  //   message: "Please provide a valid URL for the linkedin.",
+  // }),
+  // tiktok : z.string().url({
+  //   message: "Please provide a valid URL for the tiktok.",
+  // }),
+  // snapchat : z.string().url({
+  //   message: "Please provide a valid URL for the instagram.",
+  // }),
+  // youtube : z.string().url({
+  //   message: "Please provide a valid URL for the youtube.",
+  // }),
   image: z.string().url({
     message: "Please provide a valid URL for the image.",
   }),
@@ -103,7 +106,7 @@ interface User {
   snapchat: string;
   youtube: string;
   image: string;
-  // username: string;
+  username: string;
 }
 
 const Users = () => {
@@ -131,7 +134,7 @@ const Users = () => {
       snapchat: "",
       youtube: "",
       image: "",
-      // username: "",
+      username: "",
     },
   });
 
@@ -213,8 +216,8 @@ const Users = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>First name</TableHead>
-                <TableHead>Last name</TableHead>
+                {/* <TableHead>First name</TableHead> */}
+                <TableHead>Name</TableHead>
                 <TableHead>Mobile</TableHead>
                 <TableHead className="w-64">Address</TableHead>
                 <TableHead>Email</TableHead>
@@ -224,15 +227,16 @@ const Users = () => {
             <TableBody>
             {fetchUserData.map((user, index) => (
               <TableRow key={index}>
-                <TableCell className="font-medium">{user?.first_name}</TableCell>
-                <TableCell className="font-medium">{user?.last_name}</TableCell>
+                <TableCell className="font-medium">
+                  {`${user?.first_name} ${user?.last_name}`}
+                </TableCell>
                 <TableCell>{user?.mobile}</TableCell>
                 <TableCell>{user?.address}</TableCell>
                 <TableCell>{user?.email}</TableCell>
                 <TableCell>
                   {user?.image && (
-                      <div className="relative h-20 w-20">
-                        <img src={user?.image} className="rounded-full object-cover" alt="User Image" />
+                      <div className="relative h-20 w-20 rounded-full" style={{backgroundImage: `url(${user?.image})`, backgroundPosition: 'top', backgroundSize: 'cover', backgroundRepeat: 'no-repeat'}}>
+                        {/* <img src={user?.image} className="rounded-full object-cover w-full h-full" alt="User Image" /> */}
                       </div>
                     )}
                 </TableCell>
@@ -243,7 +247,10 @@ const Users = () => {
                     </div>
                   )}
                 </TableCell> */}
-                <TableCell className="flex gap-2 justify-center items-center">
+                <TableCell className="flex gap-2 justify-center items-center lg:mt-6 md:mt-6 mt-5">
+                <Link className="cursor-pointer" href={`/${user?.username}/profile`} target="_blank">
+                  <Button className=" px-1.5 py-1.5 w-8 h-8"><Eye className="w-5 h-5"/></Button>
+                </Link>
                   <EditDialogueComponent user={user} getUserData={getUserData} setOpen={setOpen} open={open} />
                   <Button className=" px-1.5 py-1.5 w-8 h-8" onClick={() => deleteUser(user?.id)}>
                   <Trash2 className="w-5 h-5" />
