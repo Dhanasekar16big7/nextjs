@@ -57,30 +57,30 @@ const formSchema = z.object({
   about : z.string().min(10, {
     message: "About me must be at least 10 characters.",
   }),
-  facebook : z.string().url({
-    message: "Please provide a valid URL for the facebook.",
-  }),
-  instagram : z.string().url({
-    message: "Please provide a valid URL for the instagram.",
-  }),
-  twitter : z.string().url({
-    message: "Please provide a valid URL for the twitter.",
-  }),
-  whatsapp : z.string().url({
-    message: "Please provide a valid URL for the whatsapp.",
-  }),
-  linkedin : z.string().url({
-    message: "Please provide a valid URL for the linkedin.",
-  }),
-  tiktok : z.string().url({
-    message: "Please provide a valid URL for the tiktok.",
-  }),
-  snapchat : z.string().url({
-    message: "Please provide a valid URL for the instagram.",
-  }),
-  youtube : z.string().url({
-    message: "Please provide a valid URL for the youtube.",
-  }),
+  // facebook : z.string().url({
+  //   message: "Please provide a valid URL for the facebook.",
+  // }),
+  // instagram : z.string().url({
+  //   message: "Please provide a valid URL for the instagram.",
+  // }),
+  // twitter : z.string().url({
+  //   message: "Please provide a valid URL for the twitter.",
+  // }),
+  // whatsapp : z.string().url({
+  //   message: "Please provide a valid URL for the whatsapp.",
+  // }),
+  // linkedin : z.string().url({
+  //   message: "Please provide a valid URL for the linkedin.",
+  // }),
+  // tiktok : z.string().url({
+  //   message: "Please provide a valid URL for the tiktok.",
+  // }),
+  // snapchat : z.string().url({
+  //   message: "Please provide a valid URL for the instagram.",
+  // }),
+  // youtube : z.string().url({
+  //   message: "Please provide a valid URL for the youtube.",
+  // }),
   image: z.string().url({
     message: "Please provide a valid URL for the image.",
   }),
@@ -227,7 +227,6 @@ const Users = () => {
             <TableBody>
             {fetchUserData.map((user, index) => (
               <TableRow key={index}>
-                {/* <TableCell className="font-medium">{user?.first_name}</TableCell> */}
                 <TableCell className="font-medium">
                   {`${user?.first_name} ${user?.last_name}`}
                 </TableCell>
@@ -236,8 +235,8 @@ const Users = () => {
                 <TableCell>{user?.email}</TableCell>
                 <TableCell>
                   {user?.image && (
-                      <div className="relative h-20 w-20">
-                        <img src={user?.image} className="rounded-full object-cover" alt="User Image" />
+                      <div className="relative h-20 w-20 rounded-full" style={{backgroundImage: `url(${user?.image})`, backgroundPosition: 'top', backgroundSize: 'cover', backgroundRepeat: 'no-repeat'}}>
+                        {/* <img src={user?.image} className="rounded-full object-cover w-full h-full" alt="User Image" /> */}
                       </div>
                     )}
                 </TableCell>
