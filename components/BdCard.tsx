@@ -78,6 +78,28 @@ const BdCard: React.FC<Props> = ({ userId }) => {
   //     .addSocial('instagram', filteredData[0].instagram)
   // };
 
+  const downloadToFile = (content: string, filename: string, contentType: string) => {
+    const a = document.createElement('a');
+    const file = new Blob([content], { type: contentType });
+    a.href = URL.createObjectURL(file);
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  };
+
+  const makeVCard = (user: User) => {
+    const vcard = `BEGIN:VCARD
+VERSION:3.0
+FN:${user?.first_name} ${user?.last_name}
+PHOTO;VALUE=URL;TYPE=JPEG:${user?.image}
+TEL;TYPE=WORK,VOICE:${user?.mobile}
+ADR;TYPE=WORK,PREF:;;${user?.address}
+EMAIL:${user?.email}
+REV:${new Date().toISOString()}
+END:VCARD`;
+    downloadToFile(vcard, 'vcard.vcf', 'text/vcard');
+  };
+
 
   return (
     <>
@@ -102,7 +124,7 @@ const BdCard: React.FC<Props> = ({ userId }) => {
                   <span className="block text-sm text-cardcontentcolor">{user.company}</span>
               </div>
               <div className="flex gap-2 pt-3.5 justify-center md:justify-start">
-                  <div className="w-14 h-14 md:w-12 md:h-12 flex text-usernamecolor bg-darkbg rounded text-center justify-center items-center hover:cursor-pointer" ><Download /></div>
+                  <div className="w-14 h-14 md:w-12 md:h-12 flex text-usernamecolor bg-darkbg rounded text-center justify-center items-center hover:cursor-pointer" onClick={() => makeVCard(user)}><Download /></div>
                   {/* <div className="w-14 h-14 md:w-12 md:h-12 flex text-usernamecolor bg-darkbg rounded text-center justify-center items-center hover:cursor-pointer"><Share2 /></div> */}
                   <RWebShare
                     data={{
