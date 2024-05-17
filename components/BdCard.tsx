@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import supabase from "@/utils/supabase/client";
 // import vCardsJS from "vcards-js";
+import { RWebShare } from "react-web-share";
 
 interface Props {
   userId: string;
@@ -102,7 +103,19 @@ const BdCard: React.FC<Props> = ({ userId }) => {
               </div>
               <div className="flex gap-2 pt-3.5 justify-center md:justify-start">
                   <div className="w-14 h-14 md:w-12 md:h-12 flex text-usernamecolor bg-darkbg rounded text-center justify-center items-center hover:cursor-pointer" ><Download /></div>
-                  <div className="w-14 h-14 md:w-12 md:h-12 flex text-usernamecolor bg-darkbg rounded text-center justify-center items-center hover:cursor-pointer"><Share2 /></div>
+                  {/* <div className="w-14 h-14 md:w-12 md:h-12 flex text-usernamecolor bg-darkbg rounded text-center justify-center items-center hover:cursor-pointer"><Share2 /></div> */}
+                  <RWebShare
+                    data={{
+                      text: `Check out ${user.first_name} ${user.last_name}'s profile!`,
+                      url: `${window.location.origin}/${user.username}/profile`,
+                      title: `${user.first_name} ${user.last_name}`,
+                    }}
+                    onClick={() => console.log("Shared successfully!")}
+                  >
+                    <div className="w-14 h-14 md:w-12 md:h-12 flex text-usernamecolor bg-darkbg rounded text-center justify-center items-center hover:cursor-pointer">
+                      <Share2 />
+                    </div>
+                  </RWebShare>
               </div>
             </div>
             </CardHeader>
