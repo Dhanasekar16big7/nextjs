@@ -10,6 +10,9 @@ export async function signIn(email: string, password: string) {
       email,
       password,
     });
+    // if(user.role !== 'admin') {
+    //     return redirect(`/login?message=You are not authorized to access this page`);
+    // }
     if (error) {
         return redirect(`/login?message=${error.message}`);
     }
