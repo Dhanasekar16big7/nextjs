@@ -56,12 +56,12 @@ export async function updateSession(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser();
 
-  let profileUrl;
+  let profilePath;
   if(request.nextUrl.pathname.endsWith('/profile')) {
-    profileUrl = request.nextUrl.pathname
+    profilePath = request.nextUrl.pathname
   }
-  
-  const publicRoutes = ['/login', `${profileUrl}`];
+
+  const publicRoutes = ['/login', `${profilePath}`];
 
   if (!user && !publicRoutes.includes(request.nextUrl.pathname)) {
     return NextResponse.redirect(new URL('/login', request.url));
