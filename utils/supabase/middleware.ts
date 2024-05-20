@@ -55,15 +55,17 @@ export async function updateSession(request: NextRequest) {
   )
 
   const { data: { user } } = await supabase.auth.getUser();
-// console.log("user1 ", user);
-  const publicRoutes = ['/login', `/${request.nextUrl.pathname}/profile`, '/bussiness-card'];
-//   console.log("redirect to ", request.nextUrl.pathname)
+
+  let profilePath;
+  if(request.nextUrl.pathname.endsWith('/profile')) {
+    profilePath = request.nextUrl.pathname
+  }
+
+  const publicRoutes = ['/login', `${profilePath}`];
 
   if (!user && !publicRoutes.includes(request.nextUrl.pathname)) {
-    console.log(request.url, 'request.url')
     return NextResponse.redirect(new URL('/login', request.url));
   }
-  
   
   return response;
 }
