@@ -53,7 +53,7 @@ export default function LoginForm (props: LoginFormProps) {
   return (
     <div>
       <div className="min-h-screen bg-gray-100 flex justify-center items-center">
-        <Card className="w-4/12 my-2">
+        <Card className="lg:w-4/12 md:w-3/4 w-full m-2">
             <CardHeader>
             <CardTitle>
                 <div className="flex justify-center">

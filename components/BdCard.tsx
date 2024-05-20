@@ -8,6 +8,7 @@ import Image from "next/image";
 import supabase from "@/utils/supabase/client";
 // import vCardsJS from "vcards-js";
 import { RWebShare } from "react-web-share";
+// import { Base64 } from 'js-base64';
 
 interface Props {
   userId: string;
@@ -65,19 +66,6 @@ const BdCard: React.FC<Props> = ({ userId }) => {
     setFilteredData(filteredData);
   }, [fetchUserData, userId]); // Update filteredData when fetchUserData or userId changes
 
-  // const downloadPDF = () => {
-  //   const vCard : any =  vCardsJS();
-  //   vCard
-  //     .addName(filteredData[0].first_name, filteredData[0].last_name)
-  //     .addCompany(filteredData[0].company)
-  //     .addEmail(filteredData[0].email)
-  //     .addAddress(filteredData[0].address)
-  //     .addPhone(filteredData[0].mobile)
-  //     .addUrl(filteredData[0].website)
-  //     .addSocial('facebook', filteredData[0].facebook)
-  //     .addSocial('instagram', filteredData[0].instagram)
-  // };
-
   const downloadToFile = (content: string, filename: string, contentType: string) => {
     const a = document.createElement('a');
     const file = new Blob([content], { type: contentType });
@@ -87,14 +75,43 @@ const BdCard: React.FC<Props> = ({ userId }) => {
     URL.revokeObjectURL(a.href);
   };
 
-  const makeVCard = (user: User) => {
+  const getBase64Image = (url: string): Promise<string> => {
+    return fetch(url)
+      .then(response => response.blob())
+      .then(blob => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            resolve(reader.result as string);
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        });
+      });
+  };
+
+  const makeVCard = async (user: User) => {
+    const imageBase64 = await getBase64Image(user.image);
+
     const vcard = `BEGIN:VCARD
 VERSION:3.0
-FN:${user?.first_name} ${user?.last_name}
-PHOTO;VALUE=URL;TYPE=JPEG:${user?.image}
-TEL;TYPE=WORK,VOICE:${user?.mobile}
-ADR;TYPE=WORK,PREF:;;${user?.address}
-EMAIL:${user?.email}
+FN:${user.first_name} ${user.last_name}
+ORG:${user.company}
+TITLE:${user.designation}
+TEL;TYPE=WORK,VOICE:${user.mobile}
+ADR;TYPE=WORK,PREF:;;${user.address}
+EMAIL:${user.email}
+URL:${user.website}
+PHOTO;ENCODING=b:${imageBase64.split(",")[1]}
+NOTES:${user.about}
+X-SOCIALPROFILE;TYPE=facebook:${user.facebook}
+X-SOCIALPROFILE;TYPE=instagram:${user.instagram}
+X-SOCIALPROFILE;TYPE=twitter:${user.twitter}
+X-SOCIALPROFILE;TYPE=whatsapp:${user.whatsapp}
+X-SOCIALPROFILE;TYPE=linkedin:${user.linkedin}
+X-SOCIALPROFILE;TYPE=tiktok:${user.tiktok}
+X-SOCIALPROFILE;TYPE=snapchat:${user.snapchat}
+X-SOCIALPROFILE;TYPE=youtube:${user.youtube}
 REV:${new Date().toISOString()}
 END:VCARD`;
     downloadToFile(vcard, 'vcard.vcf', 'text/vcard');
@@ -146,7 +163,7 @@ END:VCARD`;
                 {/* <p className="font-bold text-sm text-cardsubtitlecolor text-center md:text-left">Quick Links</p> */}
                 <div className="flex flex-wrap gap-6 md:gap-1.5 justify-center md:justify-between pt-1">
                   <div className="w-18 h-14.5 flex text-usernamecolor bg-darkbgicons rounded-lg text-center justify-center items-center hover:cursor-pointer">
-                    <MobileSvg />
+                    <a href="tel:{user.mobile}"><MobileSvg /></a>
                   </div>
                   <div className="w-18 h-14.5 flex text-usernamecolor bg-darkbgicons rounded-lg text-center justify-center items-center hover:cursor-pointer">
                     <a href="mailto:{user.email}"><MailSvg /></a>
@@ -166,9 +183,9 @@ END:VCARD`;
               </div>
               {/* Info code */}
               <div className="bg-darkbg p-2.5 mx-2.5 rounded-lg mt-3 flex flex-col gap-4">
-                <p className="flex gap-1.5 items-center"><span className="inline-block"><CallSvg /></span><span className="font-normal text-sm text-cardcontentcolor">{user.mobile}</span></p>
+                <p className="flex gap-1.5 items-center"><span className="inline-block"><CallSvg /></span><span className="font-normal text-sm text-cardcontentcolor"><a href="tel:{user.mobile}">{user.mobile}</a></span></p>
                 <p className="flex gap-1.5 items-center"><span className="inline-block"><HomeOutlineSvg /></span><span className="font-normal text-sm text-cardcontentcolor">{user.address}</span></p>
-                <p className="flex gap-1.5 items-center"><span className="inline-block"><TelegramSvg /></span><span className="font-normal text-sm text-cardcontentcolor">{user.email}</span></p>
+                <p className="flex gap-1.5 items-center"><span className="inline-block"><TelegramSvg /></span><span className="font-normal text-sm text-cardcontentcolor"><a href="mailto:{user.email}">{user.email}</a></span></p>
                 <p className="flex gap-1.5 items-center"><span className="inline-block"><WebOutlineSvg /></span><span className="font-normal text-sm text-cardcontentcolor">{user.website}</span></p>
               </div>
               {/* Social links code */}
