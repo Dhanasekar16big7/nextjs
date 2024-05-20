@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Pencil } from "lucide-react";
 import supabase from "@/utils/supabase/client";
+import { redirect } from "next/navigation";
 interface EditDialogComponentProps {
   user: any;
   getUserData: () => void;
@@ -39,6 +40,7 @@ const EditDialogueComponent: React.FC<EditDialogComponentProps> = ({ user, getUs
       console.log("edit data ", data);
       getUserData(); // Reload user data after successful update
       setOpen(false);
+      redirect("/users");
     }
     catch (error) {
       console.error("edit page error ", error);
