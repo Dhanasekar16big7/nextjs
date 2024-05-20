@@ -169,7 +169,7 @@ END:VCARD`;
                     <a href="mailto:{user.email}"><MailSvg /></a>
                   </div>
                   <div className="w-18 h-14.5 flex text-usernamecolor bg-darkbgicons rounded-lg text-center justify-center items-center hover:cursor-pointer">
-                    <a href={user.website} target="_blank"><WebSvg /></a>
+                    <a href="https://www.solution22.com.au/" target="_blank"><WebSvg /></a>
                   </div>
                   <div className="w-18 h-14.5 flex text-usernamecolor bg-darkbgicons rounded-lg text-center justify-center items-center hover:cursor-pointer">
                     <a href="/"><HomeSvg /></a>
@@ -186,7 +186,7 @@ END:VCARD`;
                 <p className="flex gap-1.5 items-center"><span className="inline-block"><CallSvg /></span><span className="font-normal text-sm text-cardcontentcolor"><a href="tel:{user.mobile}">{user.mobile}</a></span></p>
                 <p className="flex gap-1.5 items-center"><span className="inline-block"><HomeOutlineSvg /></span><span className="font-normal text-sm text-cardcontentcolor">{user.address}</span></p>
                 <p className="flex gap-1.5 items-center"><span className="inline-block"><TelegramSvg /></span><span className="font-normal text-sm text-cardcontentcolor"><a href="mailto:{user.email}">{user.email}</a></span></p>
-                <p className="flex gap-1.5 items-center"><span className="inline-block"><WebOutlineSvg /></span><span className="font-normal text-sm text-cardcontentcolor">{user.website}</span></p>
+                <p className="flex gap-1.5 items-center"><span className="inline-block"><WebOutlineSvg /></span><span className="font-normal text-sm text-cardcontentcolor"><a href={user.website} target="_blank">{user.website}</a></span></p>
               </div>
               {/* Social links code */}
               {
@@ -234,7 +234,7 @@ END:VCARD`;
                 </div>
               }
             </div>
-            <p className="mt-2.5 font-normal text-xs text-usernamecolor flex justify-center gap-1 items-center">Developed by <span><Image src="/s22logo.png" alt="logo" width={20} height={20} /></span></p>
+            <a href="https://www.solution22.com.au/" target="_blank"><p className="mt-2.5 font-normal text-xs text-usernamecolor flex justify-center gap-1 items-center">Developed by <span><Image src="/s22logo.png" alt="logo" width={20} height={20} /></span></p></a>
           </Card>
         </div>
       ))
