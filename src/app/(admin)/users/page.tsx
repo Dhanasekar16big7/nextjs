@@ -57,30 +57,14 @@ const formSchema = z.object({
   about : z.string().min(10, {
     message: "About me must be at least 10 characters.",
   }),
-  // facebook : z.string().url({
-  //   message: "Please provide a valid URL for the facebook.",
-  // }),
-  // instagram : z.string().url({
-  //   message: "Please provide a valid URL for the instagram.",
-  // }),
-  // twitter : z.string().url({
-  //   message: "Please provide a valid URL for the twitter.",
-  // }),
-  // whatsapp : z.string().url({
-  //   message: "Please provide a valid URL for the whatsapp.",
-  // }),
-  // linkedin : z.string().url({
-  //   message: "Please provide a valid URL for the linkedin.",
-  // }),
-  // tiktok : z.string().url({
-  //   message: "Please provide a valid URL for the tiktok.",
-  // }),
-  // snapchat : z.string().url({
-  //   message: "Please provide a valid URL for the instagram.",
-  // }),
-  // youtube : z.string().url({
-  //   message: "Please provide a valid URL for the youtube.",
-  // }),
+  facebook : z.string().optional(),
+  instagram : z.string().optional(),
+  twitter : z.string().optional(),
+  whatsapp : z.string().optional(),
+  linkedin : z.string().optional(),
+  tiktok : z.string().optional(),
+  snapchat : z.string().optional(),
+  youtube : z.string().optional(),
   image: z.string().url({
     message: "Please provide a valid URL for the image.",
   }),
