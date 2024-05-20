@@ -96,7 +96,6 @@ const BdCard: React.FC<Props> = ({ userId }) => {
     const vcard = `BEGIN:VCARD
 VERSION:3.0
 FN:${user.first_name} ${user.last_name}
-LN:${user.last_name} ${user.first_name}
 ORG:${user.company}
 TITLE:${user.designation}
 TEL;TYPE=WORK,VOICE:${user.mobile}
@@ -162,19 +161,19 @@ END:VCARD`;
             <div className="-mt-16">
               <div className="bg-darkbg p-2.5 mx-2.5 rounded-lg">
                 {/* <p className="font-bold text-sm text-cardsubtitlecolor text-center md:text-left">Quick Links</p> */}
-                <div className="flex flex-wrap gap-6 md:gap-1.5 justify-center md:justify-between pt-1">
+                <div className="flex flex-wrap gap-6 justify-center pt-1">
                   <div className="w-18 h-14.5 flex text-usernamecolor bg-darkbgicons rounded-lg text-center justify-center items-center hover:cursor-pointer">
-                    <a href="tel:{user.mobile}"><MobileSvg /></a>
+                    <a href={`tel:${user.mobile}`}><MobileSvg /></a>
                   </div>
                   <div className="w-18 h-14.5 flex text-usernamecolor bg-darkbgicons rounded-lg text-center justify-center items-center hover:cursor-pointer">
-                    <a href="mailto:{user.email}"><MailSvg /></a>
+                    <a href={`mailto:${user.email}`}><MailSvg /></a>
                   </div>
                   <div className="w-18 h-14.5 flex text-usernamecolor bg-darkbgicons rounded-lg text-center justify-center items-center hover:cursor-pointer">
                     <a href="https://www.solution22.com.au/" target="_blank"><WebSvg /></a>
                   </div>
-                  <div className="w-18 h-14.5 flex text-usernamecolor bg-darkbgicons rounded-lg text-center justify-center items-center hover:cursor-pointer">
+                  {/* <div className="w-18 h-14.5 flex text-usernamecolor bg-darkbgicons rounded-lg text-center justify-center items-center hover:cursor-pointer">
                     <a href="/"><HomeSvg /></a>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               {/* About us code */}
@@ -184,9 +183,9 @@ END:VCARD`;
               </div>
               {/* Info code */}
               <div className="bg-darkbg p-2.5 mx-2.5 rounded-lg mt-3 flex flex-col gap-4">
-                <p className="flex gap-1.5 items-center"><span className="inline-block"><CallSvg /></span><span className="font-normal text-sm text-cardcontentcolor"><a href="tel:{user.mobile}">{user.mobile}</a></span></p>
+                <p className="flex gap-1.5 items-center"><span className="inline-block"><CallSvg /></span><span className="font-normal text-sm text-cardcontentcolor"><a href={`tel:${user.mobile}`}>{user.mobile}</a></span></p>
                 <p className="flex gap-1.5 items-center"><span className="inline-block"><HomeOutlineSvg /></span><span className="font-normal text-sm text-cardcontentcolor">{user.address}</span></p>
-                <p className="flex gap-1.5 items-center"><span className="inline-block"><TelegramSvg /></span><span className="font-normal text-sm text-cardcontentcolor"><a href="mailto:{user.email}">{user.email}</a></span></p>
+                <p className="flex gap-1.5 items-center"><span className="inline-block"><TelegramSvg /></span><span className="font-normal text-sm text-cardcontentcolor"><a href={`mailto:${user.email}`}>{user.email}</a></span></p>
                 <p className="flex gap-1.5 items-center"><span className="inline-block"><WebOutlineSvg /></span><span className="font-normal text-sm text-cardcontentcolor"><a href={user.website} target="_blank">{user.website}</a></span></p>
               </div>
               {/* Social links code */}
