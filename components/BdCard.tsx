@@ -95,6 +95,8 @@ const BdCard: React.FC<Props> = ({ userId }) => {
 
     const vcard = `BEGIN:VCARD
 VERSION:3.0
+FN:${user.first_name}
+LN:${user.last_name}
 N:${user.first_name} ${user.last_name}
 ORG:${user.company}
 TITLE:${user.designation}
