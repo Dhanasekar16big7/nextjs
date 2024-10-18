@@ -62,6 +62,9 @@ export default function Home() {
       <div className="w-full container px-5">
       A business card makes it easy to pass on important contact details like name, job title, contact number, email address and website of the company. The recipient of the business card can easily store it in a wallet or card folder for future reference. These cards come in very handy while finding company details.
       Every business card should include your name, the company name and contact information. The primary purpose of your business card is to help people remember you and to be able to contact you when needed. Contact information can include your phone number, mailing address, physical address and email address.
+
+
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse quod eius quas reiciendis aliquam nostrum? Voluptatum mollitia molestiae pariatur esse?</p>
         <div className="text-center mt-6">
           <Button onClick={()=>{router.push("/users")}}>User Page</Button>
         </div>
