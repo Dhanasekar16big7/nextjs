@@ -63,9 +63,9 @@ export async function updateSession(request: NextRequest) {
 
   const publicRoutes = ['/login', `${profilePath}`];
 
-  if (!user && !publicRoutes.includes(request.nextUrl.pathname)) {
-    return NextResponse.redirect(new URL('/login', request.url));
-  }
+  // if (!user && !publicRoutes.includes(request.nextUrl.pathname)) {
+  //   return NextResponse.redirect(new URL('/login', request.url));
+  // }
   
   return response;
 }
