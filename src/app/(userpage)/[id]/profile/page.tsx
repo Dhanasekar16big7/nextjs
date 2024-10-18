@@ -8,6 +8,7 @@ interface Props {
 
 // console.log("params ", props.params.id);
 
+
 const UserProfile = async (props : Props) => {
     return ( 
         <>
